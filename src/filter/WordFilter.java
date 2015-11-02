@@ -4,14 +4,18 @@ import entities.Line;
 import entities.Word;
 import interfaces.*;
 import interfaces.Readable;
+import javafx.scene.chart.PieChart;
 
 import java.security.InvalidParameterException;
+import java.util.List;
 
 /**
- * Created by Mathias on 30.10.2015.
+ * Created by Mathias on 02.11.2015.
  */
-public class WordFilter<in,out> extends DataEnrichmentFilter<Line, Word> {
-    public WordFilter(interfaces.Readable<Line> input, Writeable<Word> output) throws InvalidParameterException {
+public class WordFilter<in, out> extends DataEnrichmentFilter<Line, List<Word>>  {
+
+
+    public WordFilter(interfaces.Readable<Line> input, Writeable<List<Word>> output) throws InvalidParameterException {
         super(input, output);
     }
 
@@ -19,19 +23,22 @@ public class WordFilter<in,out> extends DataEnrichmentFilter<Line, Word> {
         super(input);
     }
 
-    public WordFilter(Writeable<Word> output) throws InvalidParameterException {
+    public WordFilter(Writeable<List<Word>> output) throws InvalidParameterException {
         super(output);
     }
 
     @Override
-    protected boolean fillEntity(Line nextVal, Word entity) {
-
-
-        return false;
+    protected boolean fillEntity(Line nextVal, List<Word> entity) {
+        // Könnte man auch mit einem Abstract Filter erreichen: einfach den Code in das Write einfügen
+        String[] result = nextVal.getLine().split(" ");
+        for (String val : result){
+            entity.add(new Word(val));
+        }
+        return true;
     }
 
     @Override
-    protected Word getNewEntityObject() {
-        return new Word();
+    protected List<Word> getNewEntityObject() {
+        return null;
     }
 }

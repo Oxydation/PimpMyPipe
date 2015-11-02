@@ -23,4 +23,9 @@ public class Word {
     public void setWord(String word) {
         _word = word;
     }
+
+    @Override
+    public String toString() {
+        return _word;
+    }
 }

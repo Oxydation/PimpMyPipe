@@ -10,6 +10,9 @@ import java.security.InvalidParameterException;
  * Created by Mathias on 30.10.2015.
  */
 public class LineFilter<in, out> extends DataEnrichmentFilter<Character, Line> {
+    public LineFilter(Writeable<Line> output) throws InvalidParameterException {
+        super(output);
+    }
     public LineFilter(Readable<Character> input) throws InvalidParameterException {
         super(input);
     }
@@ -20,7 +23,8 @@ public class LineFilter<in, out> extends DataEnrichmentFilter<Character, Line> {
 
     @Override
     protected boolean fillEntity(Character nextVal, Line entity) {
-        if (nextVal != null && !nextVal.equals("\n\r")) {
+        if (nextVal != null && nextVal != -1) {
+            entity.setLine(entity.getLine() + nextVal);
             return false;
         }
         return true;
