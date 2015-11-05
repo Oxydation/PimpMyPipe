@@ -49,7 +49,7 @@ public class Source<T extends Character> implements Readable<T>, Runnable {
                 }
                 _writeable.write(null);
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
     }

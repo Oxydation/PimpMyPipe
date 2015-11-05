@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * Created by Mathias on 05.11.2015.
  */
-public class CirculationFilter<in, out> extends AbstractFilter<List<Word>, List<WordSequence>> {
-    public CirculationFilter(Readable<List<Word>> input) throws InvalidParameterException {
+public class CirculationFilter<in, out> extends AbstractFilter<WordSequence, List<WordSequence>> {
+    public CirculationFilter(Readable<WordSequence> input) throws InvalidParameterException {
         super(input);
     }
 
@@ -22,7 +22,7 @@ public class CirculationFilter<in, out> extends AbstractFilter<List<Word>, List<
         super(output);
     }
 
-    public CirculationFilter(Readable<List<Word>> input, Writeable<List<WordSequence>> output) throws InvalidParameterException {
+    public CirculationFilter(Readable<WordSequence> input, Writeable<List<WordSequence>> output) throws InvalidParameterException {
         super(input, output);
     }
 
@@ -37,17 +37,22 @@ public class CirculationFilter<in, out> extends AbstractFilter<List<Word>, List<
     }
 
     @Override
-    public void write(List<Word> value) throws StreamCorruptedException {
+    public void write(WordSequence value) throws StreamCorruptedException {
+        if (value == null) {
+            writeOutput(null);
+            return;
+        }
+
         LinkedList<WordSequence> sequences = new LinkedList<>();
 
         // Add first sequence
-        WordSequence lastWordSquence = new WordSequence((LinkedList<Word>) value);
-        sequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone()));
+        WordSequence lastWordSquence = value;
+        sequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), value.getLineNumber()));
 
-        for (int i = 0; i < value.size() - 1; i++) {
+        for (int i = 0; i < value.getWords().size() - 1; i++) {
             Word last = lastWordSquence.getWords().removeLast();
             lastWordSquence.getWords().addFirst(last);
-            sequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone()));
+            sequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), value.getLineNumber()));
         }
 
         writeOutput(sequences);

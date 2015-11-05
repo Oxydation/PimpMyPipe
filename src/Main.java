@@ -5,10 +5,7 @@ import filter.*;
 import interfaces.Writeable;
 import pipes.Pipe;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -17,21 +14,26 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        String sourceFile = "apples.txt";
+        String sourceFile = "aliceInWonderland.txt";
+        String targetFile = "index_aliceInWonderland.txt";
 
         BufferedReader bufferedReader = null;
+        BufferedWriter bufferedWriter = null;
 
         try {
             bufferedReader = new BufferedReader(new FileReader(sourceFile));
+            bufferedWriter = new BufferedWriter(new FileWriter(targetFile));
 
             // PUSH
-            Pipe<List<WordSequence>> pipe4 = new Pipe(null);
-            ABCOrderFilter<List<WordSequence>> abcdf = new ABCOrderFilter<>((Writeable<List<WordSequence>>) pipe4);
-            Pipe<List<WordSequence>> pipe3 = new Pipe(abcdf);
-            CirculationFilter<List<Word>, List<WordSequence>> cf = new CirculationFilter<>(pipe3);
-            Pipe<List<Word>> pipe2 = new Pipe(cf);
+            boolean isPush = true;
+            Sink<List<WordSequence>> sink = new Sink<>(bufferedWriter);
+            Pipe<List<WordSequence>> pipe4 = new Pipe<>(sink);
+            ABCOrderFilter_2<List<WordSequence>> abcdf = new ABCOrderFilter_2<>((Writeable<List<WordSequence>>) pipe4);
+            Pipe<List<WordSequence>> pipe3 = new Pipe<>(abcdf, isPush);
+            CirculationFilter<WordSequence, List<WordSequence>> cf = new CirculationFilter<>(pipe3);
+            Pipe<WordSequence> pipe2 = new Pipe(cf, isPush);
             WordFilter2<Line, List<Word>> wf = new WordFilter2<>(pipe2);
-            Pipe<Line> pipe1 = new Pipe(wf);
+            Pipe<Line> pipe1 = new Pipe(wf, isPush);
             LineFilter<Character, Line> lf = new LineFilter<>(pipe1);
             Source<Character> source = new Source(bufferedReader, lf);
 
