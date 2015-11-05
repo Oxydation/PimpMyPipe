@@ -8,7 +8,7 @@ public class Word {
     private String _word;
 
 
-    public Word(){
+    public Word() {
 
     }
 
@@ -22,6 +22,16 @@ public class Word {
 
     public void setWord(String word) {
         _word = word;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Word) {
+            Word w = (Word) obj;
+            w.getWord().equals(this.getWord());
+            return true;
+        }
+        return false;
     }
 
     @Override

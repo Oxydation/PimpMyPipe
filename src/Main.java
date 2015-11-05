@@ -1,9 +1,8 @@
 import entities.Line;
 import entities.Word;
-import filter.LineFilter;
-import filter.Source;
-import filter.WordFilter;
-import filter.WordFilter2;
+import entities.WordSequence;
+import filter.*;
+import interfaces.Writeable;
 import pipes.Pipe;
 
 import java.io.BufferedReader;
@@ -26,8 +25,12 @@ public class Main {
             bufferedReader = new BufferedReader(new FileReader(sourceFile));
 
             // PUSH
-            Pipe<Line> pipe2 = new Pipe(null);
-            WordFilter<Line, List<Word>> wf = new WordFilter<>(pipe2);
+            Pipe<List<WordSequence>> pipe4 = new Pipe(null);
+            ABCOrderFilter<List<WordSequence>> abcdf = new ABCOrderFilter<>((Writeable<List<WordSequence>>) pipe4);
+            Pipe<List<WordSequence>> pipe3 = new Pipe(abcdf);
+            CirculationFilter<List<Word>, List<WordSequence>> cf = new CirculationFilter<>(pipe3);
+            Pipe<List<Word>> pipe2 = new Pipe(cf);
+            WordFilter2<Line, List<Word>> wf = new WordFilter2<>(pipe2);
             Pipe<Line> pipe1 = new Pipe(wf);
             LineFilter<Character, Line> lf = new LineFilter<>(pipe1);
             Source<Character> source = new Source(bufferedReader, lf);
