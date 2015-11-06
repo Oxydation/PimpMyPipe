@@ -1,18 +1,15 @@
 package filter;
 
-import entities.Line;
 import entities.Word;
-import interfaces.*;
 import interfaces.Readable;
-import javafx.scene.chart.PieChart;
+import interfaces.Writeable;
 
 import java.security.InvalidParameterException;
-import java.util.List;
 
 /**
  * Created by Mathias on 02.11.2015.
  */
-public class WordConstructorFilter<in, out> extends DataEnrichmentFilter<Character, Word>  {
+public class WordConstructorFilter<in, out> extends DataEnrichmentFilter<Character, Word> {
 
 
     public WordConstructorFilter(Readable<Character> input, Writeable<Word> output) throws InvalidParameterException {
@@ -29,8 +26,13 @@ public class WordConstructorFilter<in, out> extends DataEnrichmentFilter<Charact
 
     @Override
     protected boolean fillEntity(Character nextVal, Word entity) {
-        if (nextVal != null && nextVal != ' ') {
-            entity.setWord(entity.getWord() + nextVal);
+        if (nextVal != null && nextVal != ' ' && nextVal != '\n' && nextVal != '\r') {
+
+            if (entity.getWord() != null) {
+                entity.setWord((entity.getWord() + nextVal).trim());
+            } else {
+                entity.setWord(("" + nextVal).trim());
+            }
             return false;
         }
         return true;

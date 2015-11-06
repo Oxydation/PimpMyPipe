@@ -41,7 +41,7 @@ public class LineConstructorFilter<in, out> extends DataEnrichmentFilter<Word, W
 
     @Override
     protected boolean fillEntity(Word nextVal, WordSequence entity) {
-        if (nextVal != null && entity.getWords().size() < getWordsLimit()) {
+        if (nextVal != null && entity.getWords() != null && entity.getWords().size() < getWordsLimit()) {
             entity.getWords().add(nextVal);
             return false;
         }

@@ -14,6 +14,7 @@ public class Cli {
 
         options.addOption("source", true, "Path or name of the source file");
         options.addOption("target", true, "Path or name of the target file");
+        options.addOption("targetReformated", true, "Path or name of the target file");
 
         options.addOption("aPush", false, "Select the mode PUSH for Excercise A");
         options.addOption("aPull", false, "Select the mode PULL for Excercise A");

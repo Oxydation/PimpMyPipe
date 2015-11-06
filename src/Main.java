@@ -21,6 +21,7 @@ public class Main {
 
        //default target name if no name is given as parameter
         String targetFile = "index_output.txt";
+        String targetFile2 = "reformated_text.txt";
 
         //parse arguments with Apache Commons Cli
         Cli cli = new Cli(args);
@@ -42,8 +43,16 @@ public class Main {
             System.out.println("Default target file: index_output.txt");
         }
 
+
+        if (cmd.hasOption("targetReformated")){
+            targetFile2 = cmd.getOptionValue("targetReformated");
+            System.out.println("Targetfile2: " + targetFile2);
+        }else{
+            System.out.println("Default target file: reformated_text.txt");
+        }
+
         //handle mode argument
-        Controller controller = new Controller(sourceFile, targetFile);
+        Controller controller = new Controller(sourceFile, targetFile, targetFile2);
 
         if(cmd.hasOption("aPush")){
             System.out.println("Mode PUSH for exercise A");

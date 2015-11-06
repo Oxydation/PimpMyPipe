@@ -5,11 +5,11 @@ package entities;
  */
 public class Word {
 
-    private String _word;
+    private String _word = "";
 
 
     public Word() {
-
+        _word = "";
     }
 
     public Word(String word) {

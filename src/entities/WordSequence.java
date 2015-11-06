@@ -19,7 +19,7 @@ public class WordSequence {
     }
 
     public WordSequence() {
-
+        _words = new LinkedList<>();
     }
 
     public LinkedList<Word> getWords() {
