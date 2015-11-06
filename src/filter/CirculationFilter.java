@@ -7,6 +7,7 @@ import interfaces.Writeable;
 
 import java.io.StreamCorruptedException;
 import java.security.InvalidParameterException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import java.util.List;
  * Created by Mathias on 05.11.2015.
  */
 public class CirculationFilter<in, out> extends AbstractFilter<WordSequence, List<WordSequence>> {
+    private HashSet<String> notAllowedWords = new HashSet();
+
     public CirculationFilter(Readable<WordSequence> input) throws InvalidParameterException {
         super(input);
     }
@@ -57,12 +60,16 @@ public class CirculationFilter<in, out> extends AbstractFilter<WordSequence, Lis
 
         // Add first sequence
         WordSequence lastWordSquence = wordSequence;
-        wordSequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), lastWordSquence.getLineNumber()));
+        if(!notAllowedWords.contains(lastWordSquence.getWords().getFirst().getWord().toLowerCase())){
+            wordSequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), lastWordSquence.getLineNumber()));
+        }
 
         for (int i = 0; i < lastWordSquence.getWords().size() - 1; i++) {
             Word last = lastWordSquence.getWords().removeLast();
             lastWordSquence.getWords().addFirst(last);
-            wordSequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), lastWordSquence.getLineNumber()));
+            if(!notAllowedWords.contains(lastWordSquence.getWords().getFirst().getWord().toLowerCase())){
+                wordSequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), lastWordSquence.getLineNumber()));
+            }
         }
 
         return wordSequences;
