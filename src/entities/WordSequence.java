@@ -18,6 +18,10 @@ public class WordSequence {
         _words = words;
     }
 
+    public WordSequence() {
+
+    }
+
     public LinkedList<Word> getWords() {
         return _words;
     }
@@ -35,7 +39,7 @@ public class WordSequence {
     }
 
 
-    private String GetWordSequenceAsString() {
+    public String GetWordSequenceAsString() {
         StringBuilder sb = new
                 StringBuilder();
 
