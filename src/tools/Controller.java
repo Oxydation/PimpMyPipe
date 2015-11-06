@@ -25,7 +25,7 @@ public class Controller {
     /**
      * Using a push pipe, ...
      */
-    public void push() {
+    public void aPush() {
 
         BufferedReader bufferedReader = null;
         BufferedWriter bufferedWriter = null;
@@ -69,7 +69,7 @@ public class Controller {
         }
     }
 
-    public void pull() {
+    public void aPull() {
         BufferedReader bufferedReader = null;
         BufferedWriter bufferedWriter = null;
 
