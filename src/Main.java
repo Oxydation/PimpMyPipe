@@ -18,7 +18,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         String sourceFile = "aliceInWonderland.txt";
-        String targetFile = "index_aliceInWonderland.txt";
+
+       //default target name if no name is given as parameter
+        String targetFile = "index_output.txt";
 
         //parse arguments with Apache Commons Cli
         Cli cli = new Cli(args);
@@ -28,11 +30,16 @@ public class Main {
         if (cmd.hasOption("source")){
             sourceFile = cmd.getOptionValue("source");
             System.out.println("Sourcefile: " + sourceFile);
-
+        }else{
+            System.out.println("No source file found! Please add parameter -source and restart application.");
+            System.exit(0);
         }
+
         if (cmd.hasOption("target")){
             targetFile = cmd.getOptionValue("target");
             System.out.println("Targetfile: " + targetFile);
+        }else{
+            System.out.println("Default target file: index_output.txt");
         }
 
         //handle mode argument

@@ -20,6 +20,8 @@ public class Cli {
         options.addOption("bPush", false, "Select the mode PUSH for Excercise B");
         options.addOption("bPull", false, "Select the mode PULL for Excercise B");
 
+        options.getOption("source").setRequired(true);
+
     }
 
     public CommandLine parse(){
