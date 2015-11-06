@@ -9,7 +9,6 @@ import interfaces.Writeable;
 import java.io.StreamCorruptedException;
 import java.security.InvalidParameterException;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by Mathias on 30.10.2015.
@@ -31,8 +30,11 @@ public class WordFilter2<in, out> extends AbstractFilter<Line, WordSequence> {
 
     @Override
     public WordSequence read() throws StreamCorruptedException {
-// TODO: für pull
-        return null;
+        Line value = readInput();
+        if (value == null) {
+            return null;
+        }
+        return generateWordSequence(value);
     }
 
     @Override
@@ -42,18 +44,22 @@ public class WordFilter2<in, out> extends AbstractFilter<Line, WordSequence> {
 
     @Override
     public void write(Line value) throws StreamCorruptedException {
-        if(value == null){
+        if (value == null) {
             writeOutput(null);
             return;
         }
 
-        String[] result = value.getLine().split(" ");
+        writeOutput(generateWordSequence(value));
+    }
+
+    private WordSequence generateWordSequence(Line line) {
+        String[] result = line.getLine().split(" ");
         LinkedList<Word> output = new LinkedList<>();
 
         for (String val : result) {
             output.add(new Word(val));
         }
 
-        writeOutput(new WordSequence(output, value.getLineNumber()));
+        return new WordSequence(output, line.getLineNumber());
     }
 }

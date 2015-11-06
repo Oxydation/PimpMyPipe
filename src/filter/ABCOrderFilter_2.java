@@ -31,7 +31,19 @@ public class ABCOrderFilter_2<T> extends AbstractFilter<List<WordSequence>, List
 
     @Override
     public List<WordSequence> read() throws StreamCorruptedException {
-        return null;
+        List<WordSequence> input = readInput();
+
+        if(input == null){
+            return null;
+        }
+
+        while (input != null) {
+            _wordSequences.addAll(input);
+            input = readInput();
+        }
+
+        Collections.sort(_wordSequences, new AlphabeticComperator());
+        return _wordSequences;
     }
 
     @Override
@@ -41,14 +53,13 @@ public class ABCOrderFilter_2<T> extends AbstractFilter<List<WordSequence>, List
 
     @Override
     public void write(List<WordSequence> value) throws StreamCorruptedException {
-        if(value != null) {
+        if (value != null) {
             _wordSequences.addAll(value);
-        }else{
+        } else {
             Collections.sort(_wordSequences, new AlphabeticComperator());
             writeOutput(_wordSequences);
             _wordSequences = new LinkedList<>();
         }
-
     }
 
     private class AlphabeticComperator implements Comparator<WordSequence> {

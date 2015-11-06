@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Sink<T extends List<WordSequence>> implements Writeable<T>, Runnable {
     private Writer _writer;
-    private interfaces.Readable<T> _tReadable;
+    private interfaces.Readable<T> _readable;
 
     public Sink(Writer writer) {
         _writer = writer;
@@ -19,23 +19,32 @@ public class Sink<T extends List<WordSequence>> implements Writeable<T>, Runnabl
 
     public Sink(Writer writer, Readable<T> tReadable) {
         _writer = writer;
-        _tReadable = tReadable;
+        _readable = tReadable;
     }
 
     @Override
     public void run() {
-
+        if (_readable != null) {
+            T input;
+            try {
+                while ((input = _readable.read()) != null) {
+                    write(input);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void write(T value) throws StreamCorruptedException {
-        if(value == null){
+        if (value == null) {
             System.out.println("Finished.");
             return;
         }
         try {
             for (WordSequence wordSequence : value) {
-                if(wordSequence != null){
+                if (wordSequence != null) {
                     _writer.write(wordSequence.toString() + "\n");
                 }
             }

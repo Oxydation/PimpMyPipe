@@ -28,7 +28,13 @@ public class CirculationFilter<in, out> extends AbstractFilter<WordSequence, Lis
 
     @Override
     public List<WordSequence> read() throws StreamCorruptedException {
-        return null;
+        WordSequence input = readInput();
+
+        if (input == null) {
+            return null;
+        }
+
+        return generateCombiniations(input);
     }
 
     @Override
@@ -43,18 +49,22 @@ public class CirculationFilter<in, out> extends AbstractFilter<WordSequence, Lis
             return;
         }
 
-        LinkedList<WordSequence> sequences = new LinkedList<>();
+        writeOutput(generateCombiniations(value));
+    }
+
+    private List<WordSequence> generateCombiniations(WordSequence wordSequence) {
+        LinkedList<WordSequence> wordSequences = new LinkedList<>();
 
         // Add first sequence
-        WordSequence lastWordSquence = value;
-        sequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), value.getLineNumber()));
+        WordSequence lastWordSquence = wordSequence;
+        wordSequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), lastWordSquence.getLineNumber()));
 
-        for (int i = 0; i < value.getWords().size() - 1; i++) {
+        for (int i = 0; i < lastWordSquence.getWords().size() - 1; i++) {
             Word last = lastWordSquence.getWords().removeLast();
             lastWordSquence.getWords().addFirst(last);
-            sequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), value.getLineNumber()));
+            wordSequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), lastWordSquence.getLineNumber()));
         }
 
-        writeOutput(sequences);
+        return wordSequences;
     }
 }
