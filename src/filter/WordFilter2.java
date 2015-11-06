@@ -30,11 +30,17 @@ public class WordFilter2<in, out> extends AbstractFilter<Line, WordSequence> {
 
     @Override
     public WordSequence read() throws StreamCorruptedException {
-        Line value = readInput();
+        Line value = null;
+        WordSequence result = null;
+
+        while((value =  readInput()) != null && (result = generateWordSequence(value)).getWords().size() < 1){
+        }
+
         if (value == null) {
             return null;
         }
-        return generateWordSequence(value);
+
+        return result;
     }
 
     @Override
@@ -49,7 +55,11 @@ public class WordFilter2<in, out> extends AbstractFilter<Line, WordSequence> {
             return;
         }
 
-        writeOutput(generateWordSequence(value));
+        WordSequence result = generateWordSequence(value);
+
+        if (result.getWords().size() >= 1) {
+            writeOutput(result);
+        }
     }
 
     private WordSequence generateWordSequence(Line line) {
@@ -57,7 +67,10 @@ public class WordFilter2<in, out> extends AbstractFilter<Line, WordSequence> {
         LinkedList<Word> output = new LinkedList<>();
 
         for (String val : result) {
-            output.add(new Word(val));
+            // Check string if it is not empty
+            if (!val.equals("") && !val.equals("\r")) {
+                output.add(new Word(val.trim()));
+            }
         }
 
         return new WordSequence(output, line.getLineNumber());
