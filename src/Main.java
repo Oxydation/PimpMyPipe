@@ -18,63 +18,20 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        String sourceFile = "aliceInWonderland.txt";
-
-       //default target name if no name is given as parameter
-        String targetFile = "index_output.txt";
-        String targetFile2 = "reformated_text.txt";
+//        String sourceFile = "aliceInWonderland.txt";
+//
+//       //default target name if no name is given as parameter
+//        String targetFile = "index_output.txt";
+//        String targetFile2 = "reformated_text.txt";
 
         //parse arguments with Apache Commons Cli
         Cli cli = new Cli(args);
         CommandLine cmd = cli.parse();
 
-        //save source and target file
-        if (cmd.hasOption("source")){
-            sourceFile = cmd.getOptionValue("source");
-            System.out.println("Sourcefile: " + sourceFile);
-        }else{
-            System.out.println("No source file found! Please add parameter -source and restart application.");
-            System.exit(0);
-        }
-
-        if (cmd.hasOption("target")){
-            targetFile = cmd.getOptionValue("target");
-            System.out.println("Targetfile: " + targetFile);
-        }else{
-            System.out.println("Default target file: index_output.txt");
-        }
-
-
-        if (cmd.hasOption("targetReformated")){
-            targetFile2 = cmd.getOptionValue("targetReformated");
-            System.out.println("Targetfile2: " + targetFile2);
-        }else{
-            System.out.println("Default target file: reformated_text.txt");
-        }
-        Alignment align = null;
-        if(cmd.hasOption("align")){
-            switch(cmd.getOptionValue("align")){
-                case "left":
-                    align = Alignment.left;
-                    break;
-                case "center":
-                    align = Alignment.center;
-                    break;
-                case "right":
-                    align = Alignment.right;
-                    break;
-                default:
-                    System.out.println("No correct value for alignment found: used default left");
-                    align = Alignment.left;
-            }
-        }else{
-            System.out.println("No value for alignment found: used default left");
-            align = Alignment.left;
-        }
+        //get data & create a controller
+        Controller controller = new Controller(cli.getSourceFile(), cli.getTargetFile(), cli.getTargetReformated(), cli.getLength(), cli.getAlignment());
 
         //handle mode argument
-        Controller controller = new Controller(sourceFile, targetFile, targetFile2, 5, align);
-
         if(cmd.hasOption("aPush")){
             System.out.println("Mode PUSH for exercise A");
             controller.aPush();

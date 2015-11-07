@@ -9,6 +9,13 @@ public class Cli {
     private String[] _args = null;
     private Options options = new Options();
 
+    private String _sourceFile;
+    private String _targetFile;
+    private String _targetReformated;
+    private int _length;
+    private Alignment _alignment;
+
+
     public Cli(String[] args){
         _args = args;
 
@@ -39,6 +46,95 @@ public class Cli {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        init(cmd);
         return cmd;
+    }
+
+    private void init(CommandLine cmd){
+        //save source and target file
+        if (cmd.hasOption("source")){
+            _sourceFile = cmd.getOptionValue("source");
+            System.out.println("Sourcefile: " + _sourceFile);
+        }else{
+            System.out.println("No source file found! Please add parameter -source and restart application.");
+            System.exit(0);
+        }
+
+        _targetFile = "index_output.txt";
+        if (cmd.hasOption("target")){
+            _targetFile = cmd.getOptionValue("target");
+            System.out.println("Targetfile: " + _targetFile);
+        }else{
+            System.out.println("Default target file: index_output.txt");
+           if(_targetFile == null || _targetFile.equals("")){
+               _targetFile = "index_output.txt";
+           }
+        }
+
+
+        _targetReformated = "reformated_text.txt";
+        if (cmd.hasOption("targetReformated")){
+            _targetReformated = cmd.getOptionValue("targetReformated");
+            System.out.println("Targetfile2: " + _targetReformated);
+        }else{
+            System.out.println("Default target file: reformated_text.txt");
+            if(_targetReformated == null || _targetReformated.equals("")){
+                _targetReformated = "reformated_text.txt";
+            }
+        }
+
+        if(cmd.hasOption("align")){
+            switch(cmd.getOptionValue("align")){
+                case "left":
+                    _alignment = Alignment.left;
+                    break;
+                case "center":
+                    _alignment = Alignment.center;
+                    break;
+                case "right":
+                    _alignment = Alignment.right;
+                    break;
+                default:
+                    System.out.println("No correct value for alignment found: used default left");
+                    _alignment = Alignment.left;
+            }
+        }else{
+            System.out.println("No value for alignment found: used default left");
+            _alignment = Alignment.left;
+        }
+
+        _length = 5;
+        if(cmd.hasOption("length")){
+            try {
+                _length = Integer.parseInt(cmd.getOptionValue("length"));
+            }catch(Exception e){
+                System.out.println("length-value was not a number! Used default 5 instead.");
+                _length = 5;
+            }
+        }else{
+            System.out.println("No value for length found: used default 5");
+        }
+    }
+
+    //Getter
+
+    public String getSourceFile() {
+        return _sourceFile;
+    }
+
+    public String getTargetFile() {
+        return _targetFile;
+    }
+
+    public String getTargetReformated() {
+        return _targetReformated;
+    }
+
+    public int getLength() {
+        return _length;
+    }
+
+    public Alignment getAlignment() {
+        return _alignment;
     }
 }
