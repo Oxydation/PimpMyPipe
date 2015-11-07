@@ -18,16 +18,20 @@ public class Controller {
     private String _sourceFile;
     private String _targetFile;
     private String _targetFile2;
+    private int _lineLength;
+    private Alignment _align;
 
     public Controller(String sourceFile, String targetFile) {
         _sourceFile = sourceFile;
         _targetFile = targetFile;
     }
 
-    public Controller(String sourceFile, String targetFile, String targetFile2) {
+    public Controller(String sourceFile, String targetFile, String targetFile2, int length, Alignment alignment) {
         _sourceFile = sourceFile;
         _targetFile = targetFile;
         _targetFile2 = targetFile2;
+        _lineLength = length;
+        _align = alignment;
     }
 
     /**
@@ -144,7 +148,7 @@ public class Controller {
             Pipe<WordSequence> subPipe1 = new Pipe(cf, isPush);
             SplitPipe<WordSequence> mainPipe = new SplitPipe<>(subPipe1, subPipe2);
             LineConstructorFilter<Word, WordSequence> wf = new LineConstructorFilter<>(mainPipe);
-            wf.setWordsLimit(4);
+            wf.setWordsLimit(_lineLength);
 
             Pipe<Word> pipe1 = new Pipe(wf, isPush);
             WordConstructorFilter<Character, Word> lf = new WordConstructorFilter<>(pipe1);

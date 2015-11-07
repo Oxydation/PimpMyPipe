@@ -5,6 +5,7 @@ import filter.*;
 import interfaces.Writeable;
 import org.apache.commons.cli.CommandLine;
 import pipes.Pipe;
+import tools.Alignment;
 import tools.Cli;
 import tools.Controller;
 
@@ -50,9 +51,29 @@ public class Main {
         }else{
             System.out.println("Default target file: reformated_text.txt");
         }
+        Alignment align = null;
+        if(cmd.hasOption("align")){
+            switch(cmd.getOptionValue("align")){
+                case "left":
+                    align = Alignment.left;
+                    break;
+                case "center":
+                    align = Alignment.center;
+                    break;
+                case "right":
+                    align = Alignment.right;
+                    break;
+                default:
+                    System.out.println("No correct value for alignment found: used default left");
+                    align = Alignment.left;
+            }
+        }else{
+            System.out.println("No value for alignment found: used default left");
+            align = Alignment.left;
+        }
 
         //handle mode argument
-        Controller controller = new Controller(sourceFile, targetFile, targetFile2);
+        Controller controller = new Controller(sourceFile, targetFile, targetFile2, 5, align);
 
         if(cmd.hasOption("aPush")){
             System.out.println("Mode PUSH for exercise A");

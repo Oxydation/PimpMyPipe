@@ -21,6 +21,10 @@ public class Cli {
         options.addOption("bPush", false, "Select the mode PUSH for Excercise B");
         options.addOption("bPull", false, "Select the mode PULL for Excercise B");
 
+        options.addOption("length", true, "Set the desired length of a line in words. Integer value!");
+        options.addOption("align", true, "Set the desired alignment of the text. Values: left, center, right.");
+
+
         options.getOption("source").setRequired(true);
 
     }
