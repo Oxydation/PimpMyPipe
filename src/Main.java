@@ -1,16 +1,8 @@
-import entities.Line;
-import entities.Word;
-import entities.WordSequence;
-import filter.*;
-import interfaces.Writeable;
 import org.apache.commons.cli.CommandLine;
-import pipes.Pipe;
-import tools.Alignment;
 import tools.Cli;
 import tools.Controller;
 
 import java.io.*;
-import java.util.List;
 
 /**
  * Created by Mathias on 30.10.2015.
@@ -19,8 +11,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 //        String sourceFile = "aliceInWonderland.txt";
-//
-//       //default target name if no name is given as parameter
+//        //default target name if no name is given as parameter
 //        String targetFile = "index_output.txt";
 //        String targetFile2 = "reformated_text.txt";
 
@@ -28,7 +19,7 @@ public class Main {
         Cli cli = new Cli(args);
         CommandLine cmd = cli.parse();
 
-        //get data & create a controller
+        // Get data from command line and create a controller
         Controller controller = new Controller(cli.getSourceFile(), cli.getTargetFile(), cli.getTargetReformated(), cli.getLength(), cli.getAlignment());
 
         //handle mode argument

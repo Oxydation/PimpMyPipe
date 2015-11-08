@@ -1,8 +1,8 @@
-package tools;
+package enumerations;
 
 /**
  * Created by Jasmin on 07.11.2015.
  */
 public enum Alignment {
-    left, center, right
+    LEFT, CENTER, RIGHT
 }

@@ -1,8 +1,8 @@
 package filter;
 
 import entities.WordSequence;
-import interfaces.*;
 import interfaces.Readable;
+import interfaces.Writeable;
 
 import java.io.StreamCorruptedException;
 import java.security.InvalidParameterException;
@@ -14,11 +14,8 @@ import java.util.List;
 /**
  * Created by Mathias on 05.11.2015.
  */
-public class ABCOrderFilter<in,out> extends  DataEnrichmentFilter<List<WordSequence>,List<WordSequence>> {
-
-    public ABCOrderFilter(Readable<List<WordSequence>> input, Writeable<List<WordSequence>> output) throws InvalidParameterException {
-        super(input, output);
-    }
+public class ABCOrderFilter<T> extends AbstractFilter<List<WordSequence>, List<WordSequence>> {
+    private List<WordSequence> _wordSequences = new LinkedList<>();
 
     public ABCOrderFilter(Readable<List<WordSequence>> input) throws InvalidParameterException {
         super(input);
@@ -28,21 +25,41 @@ public class ABCOrderFilter<in,out> extends  DataEnrichmentFilter<List<WordSeque
         super(output);
     }
 
-    @Override
-    protected boolean fillEntity(List<WordSequence> nextVal, List<WordSequence> entity) {
-        if (nextVal != null) {
-            entity.addAll(nextVal);
-            return false;
-        }
-
-        Collections.sort(entity, new AlphabeticComperator());
-        //Collections.sort(entity, (o1, o2) -> o1.toString().compareTo(o2.toString()));
-        return true;
+    public ABCOrderFilter(Readable<List<WordSequence>> input, Writeable<List<WordSequence>> output) throws InvalidParameterException {
+        super(input, output);
     }
 
     @Override
-    protected List<WordSequence> getNewEntityObject() {
-        return new LinkedList<>();
+    public List<WordSequence> read() throws StreamCorruptedException {
+        List<WordSequence> input = readInput();
+
+        if(input == null){
+            return null;
+        }
+
+        while (input != null) {
+            _wordSequences.addAll(input);
+            input = readInput();
+        }
+
+        Collections.sort(_wordSequences, new AlphabeticComperator());
+        return _wordSequences;
+    }
+
+    @Override
+    public void run() {
+
+    }
+
+    @Override
+    public void write(List<WordSequence> value) throws StreamCorruptedException {
+        if (value != null) {
+            _wordSequences.addAll(value);
+        } else {
+            Collections.sort(_wordSequences, new AlphabeticComperator());
+            writeOutput(_wordSequences);
+            _wordSequences = new LinkedList<>();
+        }
     }
 
     private class AlphabeticComperator implements Comparator<WordSequence> {

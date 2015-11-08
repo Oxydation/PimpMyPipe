@@ -3,8 +3,8 @@ package tools;
 import entities.Line;
 import entities.Word;
 import entities.WordSequence;
+import enumerations.Alignment;
 import filter.*;
-import interfaces.IOable;
 import interfaces.Writeable;
 import pipes.Pipe;
 import pipes.SplitPipe;
@@ -50,7 +50,7 @@ public class Controller {
             boolean isPush = true;
             Sink<List<WordSequence>> sink = new Sink<>(bufferedWriter);
             Pipe<List<WordSequence>> pipe4 = new Pipe<>(sink);
-            ABCOrderFilter_2<List<WordSequence>> abcdf = new ABCOrderFilter_2<>((Writeable<List<WordSequence>>) pipe4);
+            ABCOrderFilter<List<WordSequence>> abcdf = new ABCOrderFilter<>((Writeable<List<WordSequence>>) pipe4);
             Pipe<List<WordSequence>> pipe3 = new Pipe<>(abcdf, isPush);
             CirculationFilter<WordSequence, List<WordSequence>> cf = new CirculationFilter<>(pipe3);
             Pipe<WordSequence> pipe2 = new Pipe(cf, isPush);
@@ -99,7 +99,7 @@ public class Controller {
             Pipe<WordSequence> pipe2 = new Pipe(wf, isPush);
             CirculationFilter<WordSequence, List<WordSequence>> cf = new CirculationFilter<>(pipe2);
             Pipe<List<WordSequence>> pipe3 = new Pipe((interfaces.Readable) cf);
-            ABCOrderFilter_2<List<WordSequence>> abcdf = new ABCOrderFilter_2((interfaces.Readable<List<WordSequence>>) pipe3);
+            ABCOrderFilter<List<WordSequence>> abcdf = new ABCOrderFilter((interfaces.Readable<List<WordSequence>>) pipe3);
             Pipe<List<WordSequence>> pipe4 = new Pipe(abcdf, isPush);
             Sink<List<WordSequence>> sink = new Sink<>(bufferedWriter, pipe4);
 
@@ -141,7 +141,7 @@ public class Controller {
             SinkB<WordSequence> sinkReformatedFile = new SinkB<>(bufferedWriter2);
 
             Pipe<List<WordSequence>> pipe4 = new Pipe<>(sink);
-            ABCOrderFilter_2<List<WordSequence>> abcdf = new ABCOrderFilter_2<>((Writeable<List<WordSequence>>) pipe4);
+            ABCOrderFilter<List<WordSequence>> abcdf = new ABCOrderFilter<>((Writeable<List<WordSequence>>) pipe4);
             Pipe<List<WordSequence>> pipe3 = new Pipe<>(abcdf, isPush);
             CirculationFilter<WordSequence, List<WordSequence>> cf = new CirculationFilter<>(pipe3);
 
@@ -198,7 +198,7 @@ public class Controller {
             Pipe<WordSequence> pipe2 = new Pipe(lcf, isPush);
             CirculationFilter<WordSequence, List<WordSequence>> cf = new CirculationFilter<>(pipe2);
             Pipe<List<WordSequence>> pipe3 = new Pipe((interfaces.Readable) cf);
-            ABCOrderFilter_2<List<WordSequence>> abcFilter = new ABCOrderFilter_2((interfaces.Readable<List<WordSequence>>) pipe3);
+            ABCOrderFilter<List<WordSequence>> abcFilter = new ABCOrderFilter((interfaces.Readable<List<WordSequence>>) pipe3);
             Pipe<List<WordSequence>> pipe4 = new Pipe(abcFilter, isPush);
             Sink<List<WordSequence>> sink = new Sink<>(bufferedWriter, pipe4);
 

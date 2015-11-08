@@ -1,5 +1,6 @@
 package tools;
 
+import enumerations.Alignment;
 import org.apache.commons.cli.*;
 
 /**
@@ -29,7 +30,7 @@ public class Cli {
         options.addOption("bPull", false, "Select the mode PULL for Excercise B");
 
         options.addOption("length", true, "Set the desired length of a line in words. Integer value!");
-        options.addOption("align", true, "Set the desired alignment of the text. Values: left, center, right.");
+        options.addOption("align", true, "Set the desired alignment of the text. Values: LEFT, CENTER, RIGHT.");
 
 
         options.getOption("source").setRequired(true);
@@ -84,23 +85,23 @@ public class Cli {
         }
 
         if(cmd.hasOption("align")){
-            switch(cmd.getOptionValue("align")){
-                case "left":
-                    _alignment = Alignment.left;
+            switch(cmd.getOptionValue("align").toUpperCase()){
+                case "LEFT":
+                    _alignment = Alignment.LEFT;
                     break;
-                case "center":
-                    _alignment = Alignment.center;
+                case "CENTER":
+                    _alignment = Alignment.CENTER;
                     break;
-                case "right":
-                    _alignment = Alignment.right;
+                case "RIGHT":
+                    _alignment = Alignment.RIGHT;
                     break;
                 default:
-                    System.out.println("No correct value for alignment found: used default left");
-                    _alignment = Alignment.left;
+                    System.out.println("No correct value for alignment found: used default LEFT");
+                    _alignment = Alignment.LEFT;
             }
         }else{
-            System.out.println("No value for alignment found: used default left");
-            _alignment = Alignment.left;
+            System.out.println("No value for alignment found: used default LEFT");
+            _alignment = Alignment.LEFT;
         }
 
         _length = 5;
