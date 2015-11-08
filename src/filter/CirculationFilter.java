@@ -70,8 +70,10 @@ public class CirculationFilter<in, out> extends AbstractFilter<WordSequence, Lis
         WordSequence lastWordSquence = wordSequence;
 
         // Add new word sequence if it does not contain a suppressed word
-        if(lastWordSquence.getWords().size() > 0 && !_notAllowedWords.contains(lastWordSquence.getWords().getFirst().getWord().toLowerCase())){
-            wordSequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), lastWordSquence.getLineNumber()));
+        if(lastWordSquence.getWords().size() > 0 && !_notAllowedWords.contains(lastWordSquence.getWords().getFirst().getWord().toLowerCase().replaceAll("[^a-zA-Z0-9 ]", ""))){
+            if(lastWordSquence.getWords().getFirst().getWord().matches("[a-zA-Z]*")) {
+                wordSequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), lastWordSquence.getLineNumber()));
+            }
         }
 
         for (int i = 0; i < lastWordSquence.getWords().size() - 1; i++) {
@@ -80,8 +82,11 @@ public class CirculationFilter<in, out> extends AbstractFilter<WordSequence, Lis
             lastWordSquence.getWords().addFirst(last);
 
             // Add new word sequence if it does not contain a suppressed word
-            if(lastWordSquence.getWords().size() > 0 && !_notAllowedWords.contains(lastWordSquence.getWords().getFirst().getWord().toLowerCase())){
-                wordSequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), lastWordSquence.getLineNumber()));
+            if(lastWordSquence.getWords().size() > 0 && !_notAllowedWords.contains(lastWordSquence.getWords().getFirst().getWord().toLowerCase().replaceAll("[^a-zA-Z0-9 ]", ""))){
+               if(lastWordSquence.getWords().getFirst().getWord().matches("[a-zA-Z]*")){
+                    wordSequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), lastWordSquence.getLineNumber()));
+               }
+
             }
         }
 

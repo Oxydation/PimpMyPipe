@@ -83,8 +83,6 @@ public class LineConstructorFilter<in, out> extends DataEnrichmentFilter<Word, W
 
             if (_writer != null) {
                 try {
-
-                    // TODO: Add alignment!
                     String line = entity.GetWordSequenceAsString();
                     int amountChar = line.length();
                     int rest = getAmountLineChars() - amountChar;

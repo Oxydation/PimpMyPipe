@@ -45,7 +45,7 @@ public class Sink<T extends List<WordSequence>> implements Writeable<T>, Runnabl
         try {
             for (WordSequence wordSequence : value) {
                 if (wordSequence != null) {
-                    _writer.write(wordSequence.toString() + "\n");
+                    _writer.write(wordSequence.toString().replaceAll("[^a-zA-Z0-9  ']", "") + "\n");
                 }
             }
         } catch (IOException e) {

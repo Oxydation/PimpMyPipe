@@ -20,8 +20,8 @@ public class Controller {
     public static final String[] SUPPRESSED_WORDS = new String[]{
             "and", "if", "but", "as", "when", "with", "so", "in","is","of","at",
             "for", "on", "or", "at", "be", "been", "up",
-            "tp", "by", "do", "did", "had", "have", "he",
-            "she", "it", "i", "may", "me", "of", "the", "this", "a"
+            "to", "by", "do", "did", "had", "have", "he",
+            "she", "it", "i", "may", "me", "of", "the", "this", "a", "an", "are"
     };
     private String _sourceFile;
     private String _targetFile;
