@@ -26,7 +26,7 @@ public class Controller {
     private String _sourceFile;
     private String _targetFile;
     private String _targetFile2;
-    private int _amountLineChars;
+    private int _amountLineChars = 87;
     private int _lineLength;
     private Alignment _alignment;
 
@@ -166,6 +166,8 @@ public class Controller {
             SplitPipe<WordSequence> mainPipe = new SplitPipe<>(subPipe1, subPipe2);
             LineConstructorFilter<Word, WordSequence> lineConstructorFilter = new LineConstructorFilter<>(mainPipe);
             lineConstructorFilter.setWordsLimit(_lineLength);
+            lineConstructorFilter.setAmountLineChars(_amountLineChars);
+            lineConstructorFilter.setAlignment(_alignment);
 
             Pipe<Word> pipe1 = new Pipe(lineConstructorFilter, isPush);
             WordConstructorFilter<Character, Word> lf = new WordConstructorFilter<>(pipe1);
@@ -212,6 +214,9 @@ public class Controller {
             Pipe<Word> pipe1 = new Pipe(wordConstructorFilter, isPush);
             LineConstructorFilter<Word, WordSequence> lineConstructorFilter = new LineConstructorFilter<>(bufferedWriter2, pipe1);
             lineConstructorFilter.setWordsLimit(_lineLength);
+            lineConstructorFilter.setAmountLineChars(_amountLineChars);
+            lineConstructorFilter.setAlignment(_alignment);
+
             Pipe<WordSequence> pipe2 = new Pipe(lineConstructorFilter, isPush);
             CirculationFilter<WordSequence, List<WordSequence>> circulationFilter = new CirculationFilter<>(pipe2);
             circulationFilter.setSuppressedIndexWords(Arrays.asList(SUPPRESSED_WORDS));

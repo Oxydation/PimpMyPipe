@@ -16,7 +16,7 @@ import java.security.InvalidParameterException;
 public class LineConstructorFilter<in, out> extends DataEnrichmentFilter<Word, WordSequence> {
     private int _lineNumber = 1;
     private int _wordsLimit = 10;
-    private int _amountLineChars;
+    private int _amountLineChars = 87;
     private Alignment _alignment;
 
     private Writer _writer;
@@ -85,7 +85,30 @@ public class LineConstructorFilter<in, out> extends DataEnrichmentFilter<Word, W
                 try {
 
                     // TODO: Add alignment!
-                    _writer.write(entity.GetWordSequenceAsString() + "\n");
+                    String line = entity.GetWordSequenceAsString();
+                    int amountChar = line.length();
+                    int rest = getAmountLineChars() - amountChar;
+
+                    String emptyLeft = "";
+                    String emptyRight = "";
+
+                    // Get algnment
+                    switch (getAlignment()) {
+                        case CENTER:
+                            int half = rest/ 2;
+                            String space = createSpaceString(half);
+                            emptyLeft = space;
+                            emptyRight = space;
+                            break;
+                        case RIGHT:
+                            emptyLeft = createSpaceString(rest);
+                            break;
+                        case LEFT:
+                        default:
+                            emptyRight = createSpaceString(rest);
+                            break;
+                    }
+                    _writer.write(emptyLeft + entity.GetWordSequenceAsString() + emptyRight+ "\n");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -97,5 +120,13 @@ public class LineConstructorFilter<in, out> extends DataEnrichmentFilter<Word, W
     @Override
     protected WordSequence getNewEntityObject() {
         return new WordSequence();
+    }
+
+    private String createSpaceString(int amountChars) {
+        StringBuilder sb = new StringBuilder(amountChars);
+        for (int i = 0; i < amountChars; i++) {
+            sb.append(" ");
+        }
+        return sb.toString();
     }
 }
