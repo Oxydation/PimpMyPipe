@@ -15,7 +15,7 @@ import java.util.List;
  * Created by Mathias on 05.11.2015.
  */
 public class CirculationFilter<in, out> extends AbstractFilter<WordSequence, List<WordSequence>> {
-    private HashSet<String> notAllowedWords = new HashSet();
+    private HashSet<String> _notAllowedWords = new HashSet();
 
     public CirculationFilter(Readable<WordSequence> input) throws InvalidParameterException {
         super(input);
@@ -27,6 +27,14 @@ public class CirculationFilter<in, out> extends AbstractFilter<WordSequence, Lis
 
     public CirculationFilter(Readable<WordSequence> input, Writeable<List<WordSequence>> output) throws InvalidParameterException {
         super(input, output);
+    }
+
+    /**
+     * Sets the suppressed words for the index creation.
+     * @param suppressedWords
+     */
+    public void setSuppressedIndexWords(List<String> suppressedWords){
+        _notAllowedWords = new HashSet<>(suppressedWords);
     }
 
     @Override
@@ -60,14 +68,19 @@ public class CirculationFilter<in, out> extends AbstractFilter<WordSequence, Lis
 
         // Add first sequence
         WordSequence lastWordSquence = wordSequence;
-        if(!notAllowedWords.contains(lastWordSquence.getWords().getFirst().getWord().toLowerCase())){
+
+        // Add new word sequence if it does not contain a suppressed word
+        if(lastWordSquence.getWords().size() > 0 && !_notAllowedWords.contains(lastWordSquence.getWords().getFirst().getWord().toLowerCase())){
             wordSequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), lastWordSquence.getLineNumber()));
         }
 
         for (int i = 0; i < lastWordSquence.getWords().size() - 1; i++) {
+            // Move last word to first position
             Word last = lastWordSquence.getWords().removeLast();
             lastWordSquence.getWords().addFirst(last);
-            if(!notAllowedWords.contains(lastWordSquence.getWords().getFirst().getWord().toLowerCase())){
+
+            // Add new word sequence if it does not contain a suppressed word
+            if(lastWordSquence.getWords().size() > 0 && !_notAllowedWords.contains(lastWordSquence.getWords().getFirst().getWord().toLowerCase())){
                 wordSequences.add(new WordSequence((LinkedList<Word>) lastWordSquence.getWords().clone(), lastWordSquence.getLineNumber()));
             }
         }

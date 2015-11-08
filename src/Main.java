@@ -15,12 +15,14 @@ public class Main {
 //        String targetFile = "index_output.txt";
 //        String targetFile2 = "reformated_text.txt";
 
+        int amountLineChars = 80;
+
         //parse arguments with Apache Commons Cli
         Cli cli = new Cli(args);
         CommandLine cmd = cli.parse();
 
         // Get data from command line and create a controller
-        Controller controller = new Controller(cli.getSourceFile(), cli.getTargetFile(), cli.getTargetReformated(), cli.getLength(), cli.getAlignment());
+        Controller controller = new Controller(cli.getSourceFile(), cli.getTargetFile(), cli.getTargetReformated(), cli.getLength(), cli.getAlignment(), amountLineChars);
 
         //handle mode argument
         if(cmd.hasOption("aPush")){

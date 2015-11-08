@@ -1,6 +1,5 @@
 package filter;
 
-import entities.Line;
 import entities.Word;
 import entities.WordSequence;
 import interfaces.Readable;
@@ -49,18 +48,26 @@ public class LineConstructorFilter<in, out> extends DataEnrichmentFilter<Word, W
 
     @Override
     protected boolean fillEntity(Word nextVal, WordSequence entity) {
-        if (nextVal != null && entity.getWords() != null && entity.getWords().size() < getWordsLimit()) {
-            entity.getWords().add(nextVal);
+        if (nextVal != null && entity.getWords().size()  < getWordsLimit() -1) {
+            if (nextVal.getWord() != "") {
+                entity.getWords().add(nextVal);
+            }
             return false;
+        } else {
+
+            // Add word and
+            if (nextVal != null && nextVal.getWord() != "") {
+                entity.getWords().add(nextVal);
+            }
+            entity.setLineNumber(_lineNumber++);
+
+            try {
+                _writer.write(entity.GetWordSequenceAsString() + "\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
         }
-        //entity.setLine(entity.getLine().replace('\r', ' '));
-        entity.setLineNumber(_lineNumber++);
-        try {
-            _writer.write(entity.GetWordSequenceAsString() + "\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return true;
     }
 
     @Override
