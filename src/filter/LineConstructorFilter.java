@@ -2,6 +2,7 @@ package filter;
 
 import entities.Word;
 import entities.WordSequence;
+import enumerations.Alignment;
 import interfaces.Readable;
 import interfaces.Writeable;
 
@@ -15,6 +16,9 @@ import java.security.InvalidParameterException;
 public class LineConstructorFilter<in, out> extends DataEnrichmentFilter<Word, WordSequence> {
     private int _lineNumber = 1;
     private int _wordsLimit = 10;
+    private int _amountLineChars;
+    private Alignment _alignment;
+
     private Writer _writer;
 
     public int getWordsLimit() {
@@ -23,6 +27,22 @@ public class LineConstructorFilter<in, out> extends DataEnrichmentFilter<Word, W
 
     public void setWordsLimit(int wordsLimit) {
         _wordsLimit = wordsLimit;
+    }
+
+    public int getAmountLineChars() {
+        return _amountLineChars;
+    }
+
+    public void setAmountLineChars(int amountLineChars) {
+        _amountLineChars = amountLineChars;
+    }
+
+    public Alignment getAlignment() {
+        return _alignment;
+    }
+
+    public void setAlignment(Alignment alignment) {
+        _alignment = alignment;
     }
 
     public LineConstructorFilter(Readable<Word> input, Writeable<WordSequence> output) throws InvalidParameterException {
@@ -63,6 +83,8 @@ public class LineConstructorFilter<in, out> extends DataEnrichmentFilter<Word, W
 
             if (_writer != null) {
                 try {
+
+                    // TODO: Add alignment!
                     _writer.write(entity.GetWordSequenceAsString() + "\n");
                 } catch (IOException e) {
                     e.printStackTrace();

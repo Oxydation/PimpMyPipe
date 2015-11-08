@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class Controller {
     public static final String[] SUPPRESSED_WORDS = new String[]{
-            "and", "if", "but", "as", "when", "with", "so", "in",
+            "and", "if", "but", "as", "when", "with", "so", "in","is","of","at",
             "for", "on", "or", "at", "be", "been", "up",
             "tp", "by", "do", "did", "had", "have", "he",
             "she", "it", "i", "may", "me", "of", "the", "this", "a"
@@ -164,10 +164,10 @@ public class Controller {
             Pipe<WordSequence> subPipe2 = new Pipe(sinkReformatedFile);
             Pipe<WordSequence> subPipe1 = new Pipe(cf, isPush);
             SplitPipe<WordSequence> mainPipe = new SplitPipe<>(subPipe1, subPipe2);
-            LineConstructorFilter<Word, WordSequence> wf = new LineConstructorFilter<>(mainPipe);
-            wf.setWordsLimit(_lineLength);
+            LineConstructorFilter<Word, WordSequence> lineConstructorFilter = new LineConstructorFilter<>(mainPipe);
+            lineConstructorFilter.setWordsLimit(_lineLength);
 
-            Pipe<Word> pipe1 = new Pipe(wf, isPush);
+            Pipe<Word> pipe1 = new Pipe(lineConstructorFilter, isPush);
             WordConstructorFilter<Character, Word> lf = new WordConstructorFilter<>(pipe1);
             Source<Character> source = new Source(bufferedReader, lf);
 
