@@ -154,6 +154,8 @@ public class Controller {
             boolean isPush = true;
             Sink<List<WordSequence>> sink = new Sink<>(bufferedWriter);
             SinkB<WordSequence> sinkReformatedFile = new SinkB<>(bufferedWriter2);
+            sinkReformatedFile.setAmountLineChars(_amountLineChars);
+            sinkReformatedFile.setAlignment(_alignment);
 
             Pipe<List<WordSequence>> pipe4 = new Pipe<>(sink);
             ABCOrderFilter<List<WordSequence>> abcdf = new ABCOrderFilter<>((Writeable<List<WordSequence>>) pipe4);
